@@ -1,43 +1,85 @@
-# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+# Rebuilds static/ from source (frontend bundle + data snapshot from the real backend)
+# and publishes it to GitHub Pages: https://thirumald.github.io/precast/
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - "backend/**"
+      - "tools/static/**"
+      - "static/**"
+      - ".github/workflows/static.yml"
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# One deployment at a time; let an in-progress production deployment finish.
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd frontend && npm ci --no-audit --no-fund && cd ..
+          pip install -r backend/requirements.txt
+
+      - name: Backend tests
+        run: pip install pytest && cd backend && pytest -q
+
+      - name: Build static bundle
+        run: cd frontend && npm run build:static
+
+      - name: Build snapshot, downloads and pages
+        env:
+          PRECAST_LLM_ENABLED: "0"   # deterministic template output; no model in CI
+        run: python tools/static/build_static.py
+
+      - name: Check output
+        run: |
+          set -e
+          test -f static/index.html
+          test -f static/assets/precast.js
+          test -f static/data/snapshot.js
+          n=$(ls static/*.html | wc -l)
+          echo "pages: $n"
+          [ "$n" -ge 23 ]
+          du -sh static
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: static
+
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v5

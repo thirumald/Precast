@@ -93,7 +93,11 @@ The [`static/`](static/) folder is a self-contained, read-only edition: one HTML
 
 Data comes from `static/data/snapshot.js`, captured by running the real backend at build time. It includes KPIs and reports for every single filter value, drafts for every opportunity and announcement, and the suggested Ask Precast questions; other questions are answered by an offline keyword parser. Editing, live AI generation, imports and Microsoft 365 sync need the full app.
 
-Rebuild after changing code or data:
+**Live deployment:** the `Deploy static content to Pages` workflow (`.github/workflows/static.yml`) runs the backend tests, rebuilds the bundle and snapshot from source, and publishes `static/` to GitHub Pages at **https://thirumald.github.io/precast/** on every push to `main` that touches `frontend/`, `backend/`, `static/` or `tools/static/`. It can also be run manually from the Actions tab (**Run workflow**).
+
+One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions**. On a private repository, Pages needs a paid GitHub plan, and the site is public unless the organisation restricts Pages visibility; the sample data is illustrative, but never deploy a snapshot of real data there.
+
+Rebuild locally after changing code or data:
 
 ```bash
 cd frontend && npm run build:static && cd ..
