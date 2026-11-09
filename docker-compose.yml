@@ -1,0 +1,47 @@
+# Precast: dashboard + API + local LLM (Ollama). `docker compose up -d` then open http://localhost:8000
+services:
+  precast:
+    build: .
+    image: precast:latest
+    ports: ["8000:8000"]
+    environment:
+      PRECAST_LLM_URL: http://ollama:11434/v1
+      PRECAST_LLM_MODEL: ${PRECAST_LLM_MODEL:-qwen2.5:3b-instruct}
+      PRECAST_API_KEY: ${PRECAST_API_KEY:-}
+      PRECAST_SEED: ${PRECAST_SEED:-1}
+      # Microsoft 365 (optional; can also be set in the UI under Data & Integrations)
+      PRECAST_M365_TENANT_ID: ${PRECAST_M365_TENANT_ID:-}
+      PRECAST_M365_CLIENT_ID: ${PRECAST_M365_CLIENT_ID:-}
+      PRECAST_M365_CLIENT_SECRET: ${PRECAST_M365_CLIENT_SECRET:-}
+      PRECAST_SP_SITE: ${PRECAST_SP_SITE:-}
+      PRECAST_SP_TRACKER_PATH: ${PRECAST_SP_TRACKER_PATH:-}
+      PRECAST_SP_OPP_ROOT: ${PRECAST_SP_OPP_ROOT:-}
+      PRECAST_TEAMS_TEAM_ID: ${PRECAST_TEAMS_TEAM_ID:-}
+      PRECAST_TEAMS_WEBHOOK: ${PRECAST_TEAMS_WEBHOOK:-}
+      PRECAST_OUTLOOK_MAILBOX: ${PRECAST_OUTLOOK_MAILBOX:-}
+    volumes: ["precast-data:/data"]
+    depends_on: [ollama]
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes: ["ollama:/root/.ollama"]
+    restart: unless-stopped
+    # Uncomment for NVIDIA GPUs (requires the NVIDIA Container Toolkit):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+
+  # One-shot: pulls the model into the ollama volume, then exits.
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on: [ollama]
+    environment: { OLLAMA_HOST: "ollama:11434" }
+    entrypoint: ["/bin/sh", "-c", "sleep 5 && ollama pull ${PRECAST_LLM_MODEL:-qwen2.5:3b-instruct}"]
+    volumes: ["ollama:/root/.ollama"]
+    restart: "no"
+
+volumes:
+  precast-data:
+  ollama:
