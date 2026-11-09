@@ -1,9 +1,11 @@
+<img src="docs/brand/presight-logo.svg" alt="Presight" height="56">
+
 # Precast
 
 **Predict. Forecast. Precast.**
 The Strategic Intelligence Hub: an AI-native command centre that turns the strategic opportunities tracker into live win probabilities, risk-weighted forecasts and drafted executive interventions. Everything runs on your own infrastructure with a lightweight local LLM.
 
-![Overview](docs/screenshots/overview.png)
+![Executive Dashboard](docs/screenshots/executive-dashboard.png)
 
 *Precast* blends **pre**dictive and fore**cast**: it scores every deal's chance of closing, re-weights the pipeline by that probability and shows where each deal is heading next.
 
@@ -13,6 +15,8 @@ The Strategic Intelligence Hub: an AI-native command centre that turns the strat
 
 | Module | What it does | AI / model enhancement |
 |---|---|---|
+| **Executive Dashboard** | Top-management KPI scorecard: 14 KPIs with targets, red/amber/green status, 8-week trends and change vs 4 weeks ago; headline figures; decisions required | Filterable by domain, region, country, segment and sponsor; every tile drills into its report; editable targets |
+| **Reports** | 9 management reports (below), each on screen, **Print / PDF** and **Excel** | AI-written executive narrative; all figures computed live from the register |
 | **Overview** | KPIs, pipeline by stage and domain, outlook, attention list, milestones | Risk-weighted expected value, quarterly forecast, biggest 14-day probability moves |
 | **Forecast & Scoring** | Six-quarter forecast (commit / best case / pipeline), scored register | Explainable win probability per deal, 8-week trend, dynamic commercial potential, domain win/loss calibration |
 | **Executive Matrix** | 5×5 priority × potential matrix | Toggle manual vs AI (risk-weighted) potential; **predicted movement vectors** for next week |
@@ -25,17 +29,40 @@ The Strategic Intelligence Hub: an AI-native command centre that turns the strat
 | **Ontology & Graph** | Domain ontology and knowledge-graph explorer | OWL/Turtle and JSON-LD export; per-opportunity neighbourhood graph including prediction factors |
 | **Data & Integrations** | Excel template, import/export, CRM API, Microsoft 365 | SharePoint, Teams and Outlook sync |
 
+### Management reports
+
+| Report | Audience | Contents |
+|---|---|---|
+| Executive Summary (board pack) | CEO / Board | Narrative, KPI scorecard vs target, quarterly forecast vs target, top 10 deals, decisions required, top risks |
+| Pipeline Health | C-suite | By stage, domain and segment; aging; data-quality exceptions |
+| Forecast & Commit | CEO / CFO | Six-quarter forecast vs target, deals closing this and next quarter, probability movers, slipped milestones |
+| Win / Loss Analysis | CCO / Strategy | Win rate by domain and deal size, value won and lost, sales cycle, model calibration |
+| Risk & Interventions | CEO / COO | Value at risk by domain and region, at-risk deals with model drivers, blocked/escalated/overdue actions |
+| Regional Performance | Regional leadership | Region and country exposure, risk, competition; region × domain matrix |
+| Sponsor Scorecard | CEO / ExCo | Per executive sponsor and owner: value, expected value, interventions, overdue actions, engagement, data freshness |
+| Engagement Activity | Domain directors | Weekly volume, mix, sources (manual / Outlook / Teams), quiet opportunities, tone |
+| Announcement Readiness | Communications / IR | Pipeline of announcements, approvals pending by gate, timing risk |
+
+All reports accept the same filters (`?domain=&region=&country=&segment=&sponsor=`); `GET /api/reports/{id}.xlsx` exports any report to Excel. A sample PDF: [`docs/Precast_Board_Pack_sample.pdf`](docs/Precast_Board_Pack_sample.pdf).
+
+**KPIs**: risk-weighted pipeline, total pipeline, pipeline coverage, quarterly weighted forecast, win rate (12 months), average win probability, value at risk, open interventions, actions completed on time, engagement coverage (30 days), data freshness, average sales cycle, pipeline velocity (deals × average size × win rate ÷ cycle), announcement readiness. Targets are set in the dashboard (**Set targets**) or `PUT /api/kpis/targets`; amber means within 15% of target (20% for limits such as value at risk).
+
+![Risk report](docs/screenshots/report-risk.png)
+
 Every opportunity opens a drawer with **Summary · Prediction · Activity · Discussion · Knowledge graph · Workspace** tabs. *Discussion* is a threaded conversation per opportunity, synced with its Teams channel. *Workspace* links the SharePoint document folder, the Teams channel and Outlook.
 
-| Prediction drawer | Executive matrix with movement vectors |
+| Pipeline overview | Prediction drawer |
 |---|---|
-| ![Prediction](docs/screenshots/prediction.png) | ![Matrix](docs/screenshots/matrix.png) |
+| ![Overview](docs/screenshots/overview.png) | ![Prediction](docs/screenshots/prediction.png) |
 
-| Geospatial | Ask Precast |
+| Executive matrix with movement vectors | Geospatial |
 |---|---|
-| ![Geospatial](docs/screenshots/geospatial.png) | ![Ask](docs/screenshots/ask.png) |
+| ![Matrix](docs/screenshots/matrix.png) | ![Geospatial](docs/screenshots/geospatial.png) |
 
-Arabic interface (right-to-left): ![Arabic](docs/screenshots/overview-arabic.png)
+| Ask Precast | Arabic interface (RTL) |
+|---|---|
+| ![Ask](docs/screenshots/ask.png) | ![Arabic](docs/screenshots/overview-arabic.png) |
+
 
 ---
 
@@ -68,7 +95,7 @@ npm run dev                              # http://localhost:5173 (proxies /api t
 ollama pull qwen2.5:3b-instruct && ollama serve
 ```
 
-Tests: `cd backend && pytest -q` (20 tests, including mocked Microsoft Graph and LLM endpoints).
+Tests: `cd backend && pytest -q` (22 tests, including mocked Microsoft Graph and LLM endpoints).
 
 ---
 
@@ -171,6 +198,8 @@ Interactive docs at `/docs`. Main endpoints:
 
 | | |
 |---|---|
+| `GET /api/kpis` · `GET/PUT /api/kpis/targets` · `GET /api/filters` | Executive KPI scorecard, targets, filter values |
+| `GET /api/reports` · `GET /api/reports/{id}[.xlsx]` | Report catalogue, report JSON or Excel |
 | `GET /api/overview` · `/api/forecast` · `/api/matrix` · `/api/geo` | Dashboard data |
 | `GET/POST/PATCH /api/opportunities[/{id}]` | Register (scored, enriched) |
 | `POST /api/ask` | Bilingual Q&A |
@@ -226,4 +255,10 @@ The bundle needs no internet access at runtime (map, fonts and model are all loc
 
 ---
 
-*All seed records are illustrative. Precast v1.0, Presight.*
+## Brand assets
+
+`docs/brand/` holds the Presight logo as resolution-independent SVG (`presight-logo.svg` for light backgrounds, `presight-logo-white.svg` for dark) plus 2000 px PNGs. It was vectorised from the supplied raster with `tools/logo/build_logo.py`: layered Bézier tracing, with the gradient ring rebuilt as true geometry. Replace these files with the official master artwork from Brand/Marketing when available; the app picks them up from `frontend/public/brand/`.
+
+---
+
+*All seed records are illustrative. Precast v1.1, Presight.*

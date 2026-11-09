@@ -172,6 +172,18 @@ ACTIONS = [
     ("OPP-015", "Lock UAT acceptance criteria", "Technical", "Head of Public Safety", 11, "In Progress", "High", "", "No", 5),
     ("OPP-019", "Re-baselined BoQ submission", "Commercial", "Director, Urban Solutions", -9, "Blocked", "High", "Awaiting OEM pricing", "Yes", 40),
     ("OPP-016", "POC results board deck", "Executive", "Director, Urban Solutions", 14, "In Progress", "Normal", "", "No", 10),
+    # completed history, so on-time performance is measurable
+    ("OPP-001", "Technical evaluation response", "Technical", "Head of Public Safety", -40, "Completed", "High", "", "No", 60),
+    ("OPP-001", "Reference site visit", "Executive", "Chief Executive Officer", -25, "Completed", "Normal", "", "No", 45),
+    ("OPP-002", "Phase 1 pilot KPI report", "Delivery", "Director, Urban Solutions", -30, "Completed", "High", "", "No", 50),
+    ("OPP-006", "Legal mark-up of contract", "Legal", "Director, Urban Solutions", -12, "Completed", "High", "", "No", 30),
+    ("OPP-008", "Use-case prioritisation workshop", "Technical", "Head of Public Safety", -21, "Completed", "Normal", "", "No", 35),
+    ("OPP-015", "BRD comment responses", "Technical", "Head of Public Safety", -28, "Completed", "High", "", "No", 48),
+    ("OPP-015", "Compliance matrix update", "Commercial", "Head of Public Safety", -6, "Completed", "Normal", "", "No", 14),
+    ("OPP-016", "POC site installation", "Delivery", "Director, Urban Solutions", -38, "Completed", "Normal", "", "No", 60),
+    ("OPP-018", "Phase 1 acceptance", "Delivery", "Director, Urban Solutions", -50, "Completed", "Critical", "", "No", 80),
+    ("OPP-020", "Ministry introduction pack", "Commercial", "Head of Energy", -10, "Completed", "Normal", "", "No", 15),
+    ("OPP-007", "Discovery summary", "Commercial", "Head of Financial Services", -60, "Completed", "Normal", "", "No", 70),
     ("OPP-017", "Integration API access from incumbent VMS vendor", "Technical", "Head of Public Safety", -4, "Blocked", "High", "Incumbent vendor withholding SDK licence", "Yes", 18),
 ]
 
@@ -216,8 +228,8 @@ def seed(force: bool = False) -> bool:
             id=f"HIS-{i:03d}", name=f"Historical {dom.lower()} engagement {i}", country=country, lat=lat, lon=lon,
             domain=dom, segment="Government", counterparty="Example: historical client", type="Commercial Contract",
             sponsor="Chief Commercial Officer", owner="Sales", priority=3, commercial=3, value=v, status=status,
-            outlook="Positive" if status == "Closed Won" else "Negative", verified=_d(-200), created=_d(-600),
-            closed=_d(-400 + i * 12), source="Historical record"))
+            outlook="Positive" if status == "Closed Won" else "Negative", verified=_d(-200),
+            created=_d(-400 + i * 12 - (150 + (i * 37) % 160)), closed=_d(-400 + i * 12), source="Historical record"))
     for i, (opp, ago, typ, summary, follow, due_in) in enumerate(ENGAGEMENTS, start=1):
         db.upsert("engagements", dict(
             id=f"ENG-{i:03d}", opp=opp, date=_d(-ago), type=typ, summary=summary, follow_up=follow,

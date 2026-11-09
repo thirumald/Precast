@@ -6,6 +6,7 @@ import Announcements from "./pages/Announcements";
 import Ask from "./pages/Ask";
 import Data from "./pages/Data";
 import Engagements from "./pages/Engagements";
+import Executive from "./pages/Executive";
 import Forecast from "./pages/Forecast";
 import Interventions from "./pages/Interventions";
 import MapView from "./pages/MapView";
@@ -13,10 +14,14 @@ import Matrix from "./pages/Matrix";
 import Ontology from "./pages/Ontology";
 import Overview from "./pages/Overview";
 import Register from "./pages/Register";
+import Reports from "./pages/Reports";
 import { App as Ctx, Icon } from "./ui";
 
 const ROUTES = [
-  { id: "overview", label: "Overview", el: Overview, icon: "M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z" },
+  { id: "executive", label: "Executive Dashboard", el: Executive, icon: "M12 3v4M12 17v4M3 12h4M17 12h4M12 12m-5 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0" },
+  { id: "reports", label: "Reports", el: Reports, icon: "M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5" },
+  { sep: true },
+  { id: "overview", label: "Pipeline Overview", el: Overview, icon: "M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z" },
   { id: "forecast", label: "Forecast & Scoring", el: Forecast, icon: "M3 3v18h18M7 15l4-4 3 3 6-7" },
   { id: "matrix", label: "Executive Matrix", el: Matrix, icon: "M4 4h16v16H4zM4 12h16M12 4v16" },
   { id: "map", label: "Geospatial", el: MapView, icon: "M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" },
@@ -31,7 +36,7 @@ const ROUTES = [
 ] as const;
 
 type Route = Extract<(typeof ROUTES)[number], { id: string }>;
-const routeOf = () => (ROUTES.find((r) => "id" in r && "#/" + r.id === location.hash) as Route | undefined) ?? (ROUTES[0] as Route);
+const routeOf = () => (ROUTES.find((r) => "id" in r && new RegExp(`^#/${r.id}($|[/?])`).test(location.hash)) as Route | undefined) ?? (ROUTES[0] as Route);
 
 function Logo() {
   return (
@@ -70,7 +75,10 @@ function Shell() {
       <Ctx.Provider value={{ openOpp, toast, version, bump, lang }}>
         <div className="shell">
           <nav className="side" aria-label="Main">
-            <div className="brand"><Logo /><div><b>Precast</b><small>{t("Strategic Intelligence Hub")}</small></div></div>
+            <div className="brand">
+              <img className="pl" src="/brand/presight-logo-white.svg" alt="Presight" />
+              <div className="prod"><Logo /><div><b>Precast</b><small>{t("Strategic Intelligence Hub")}</small></div></div>
+            </div>
             <div className="nav">
               {ROUTES.map((r, i) => "sep" in r ? <div key={i} className="sep" /> : (
                 <a key={r.id} href={"#/" + r.id} className={route.id === r.id ? "on" : ""} aria-current={route.id === r.id ? "page" : undefined}>
@@ -81,7 +89,7 @@ function Shell() {
             <div className="side-foot">
               <span className={"engine" + (llm?.available ? " on" : "")}><i />{llm?.available ? `LLM · ${llm.model}` : "LLM offline · template mode"}</span>
               <span>Sovereign deployment · data stays on-premises</span>
-              <span>Precast v1.0 · Presight</span>
+              <span>Precast v1.1 · Presight</span>
             </div>
           </nav>
           <main>

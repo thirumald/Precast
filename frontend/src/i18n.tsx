@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 export type Lang = "en" | "ar";
 
 const AR: Record<string, string> = {
-  "Overview": "نظرة عامة", "Forecast & Scoring": "التنبؤ والتقييم", "Executive Matrix": "المصفوفة التنفيذية",
+  "Overview": "نظرة عامة", "Pipeline Overview": "نظرة عامة على خط الأنابيب", "Executive Dashboard": "لوحة القيادة التنفيذية", "Reports": "التقارير", "Forecast & Scoring": "التنبؤ والتقييم", "Executive Matrix": "المصفوفة التنفيذية",
   "Geospatial": "الخريطة الجغرافية", "Interventions": "التدخلات", "Announcements": "الإعلانات",
   "Engagement Log": "سجل التواصل", "Register": "سجل الفرص", "Ask Precast": "اسأل بريكاست",
   "Ontology & Graph": "الأنطولوجيا والرسم المعرفي", "Data & Integrations": "البيانات والتكامل",

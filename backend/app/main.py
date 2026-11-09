@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Res
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import assistant, config, db, drafts, extract, ingest, llm, m365, ontology, scoring, seed
+from . import assistant, config, db, drafts, extract, ingest, llm, m365, ontology, reports, scoring, seed
 from .service import snapshot
 
 @asynccontextmanager
@@ -142,6 +142,60 @@ def overview():
         "forecast": fc, "attention": att, "timeline": items[:14], "movers": movers,
         "calibration": s.cal.as_dict(),
     }
+
+
+# ------------------------------------------------------------------ executive KPIs and reports
+def _filters(request: Request) -> dict:
+    return {k: request.query_params.get(k) for k in reports.FILTER_KEYS if request.query_params.get(k)}
+
+
+@app.get("/api/kpis")
+def get_kpis(request: Request):
+    return reports.kpis(snapshot(), _filters(request))
+
+
+@app.get("/api/kpis/targets")
+def get_targets():
+    return {"targets": reports.targets(), "defaults": reports.DEFAULT_TARGETS}
+
+
+@app.put("/api/kpis/targets", dependencies=[Depends(write_guard)])
+def put_targets(body: dict):
+    return {"targets": reports.save_targets(body)}
+
+
+@app.get("/api/filters")
+def filter_options():
+    s = snapshot()
+    live = s.live
+    return {"domain": list(ontology.VOCAB["Domain"]),
+            "region": sorted({r for r in (ontology.region_of(o.get("country")) for o in live) if r}),
+            "country": sorted({o["country"] for o in live if o.get("country")}),
+            "segment": sorted({o["segment"] for o in live if o.get("segment")}),
+            "sponsor": sorted({o["sponsor"] for o in live if o.get("sponsor")})}
+
+
+@app.get("/api/reports")
+def list_reports():
+    return reports.catalogue()
+
+
+@app.get("/api/reports/{rid}.xlsx")
+def report_xlsx(rid: str, request: Request):
+    try:
+        rep = reports.build(snapshot(), rid, _filters(request))
+    except KeyError:
+        raise HTTPException(404, "Unknown report") from None
+    return Response(reports.to_xlsx(rep), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    headers={"Content-Disposition": f'attachment; filename="Precast_{rid}_{date.today().isoformat()}.xlsx"'})
+
+
+@app.get("/api/reports/{rid}")
+def report(rid: str, request: Request):
+    try:
+        return reports.build(snapshot(), rid, _filters(request))
+    except KeyError:
+        raise HTTPException(404, "Unknown report") from None
 
 
 # ------------------------------------------------------------------ opportunities

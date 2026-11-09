@@ -131,3 +131,28 @@ def test_geo_and_matrix(c):
     assert g["features"] and g["countries"][0]["value"] >= g["countries"][-1]["value"]
     m = c.get("/api/matrix").json()
     assert all(1 <= p["potential"] <= 5 for p in m["points"])
+
+
+def test_kpis_and_reports(c):
+    k = c.get("/api/kpis").json()
+    assert len(k["kpis"]) == 14 and sum(k["summary"].values()) >= 12
+    assert all(i["status"] in ("green", "amber", "red", "neutral") for i in k["kpis"])
+    trended = [i for i in k["kpis"] if len(i["trend"]) == 8]
+    assert len(trended) >= 5
+    fk = c.get("/api/kpis?domain=Security&region=GCC").json()
+    assert fk["headline"]["active"] < k["headline"]["active"] and "Security" in fk["scope"]
+    cat = c.get("/api/reports").json()
+    assert len(cat) == 9
+    for r in cat:
+        rep = c.get(f"/api/reports/{r['id']}?domain=Urban").json()
+        assert rep["sections"] and rep["filters"] == {"domain": "Urban"}
+        x = c.get(f"/api/reports/{r['id']}.xlsx")
+        assert x.status_code == 200 and x.content[:2] == b"PK"
+    assert c.get("/api/reports/nope").status_code == 404
+
+
+def test_targets_change_status(c):
+    c.put("/api/kpis/targets", json={"win_rate": 0.99})
+    wr = next(i for i in c.get("/api/kpis").json()["kpis"] if i["key"] == "win_rate")
+    assert wr["target"] == 0.99 and wr["status"] == "red"
+    c.put("/api/kpis/targets", json={"win_rate": 0.5})
