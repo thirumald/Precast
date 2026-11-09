@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api } from "../api";
+import { api, href } from "../api";
 import Filters, { qs, type F } from "../components/Filters";
 import ReportView, { fmtUnit, KpiTile, Stack, type Kpi, type Report } from "../components/ReportView";
 import { fd } from "../format";
@@ -39,7 +39,7 @@ export default function Executive() {
         </div>
         <span style={{ flex: 1 }} />
         <button className="btn" onClick={() => setEditing(true)}>Set targets</button>
-        <a className="btn" href={"/api/reports/executive-summary.xlsx" + qs(f)} download>Export to Excel</a>
+        <a className="btn" href={href("/api/reports/executive-summary.xlsx" + qs(f))} download aria-disabled={!href("/api/reports/executive-summary.xlsx" + qs(f))}>Export to Excel</a>
         <button className="btn primary" onClick={() => open("executive-summary")}>Open board pack</button>
       </div>
       <Filters value={f} onChange={setF} />

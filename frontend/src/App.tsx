@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { api } from "./api";
+import { api, asset, STATIC, snapshotDate } from "./api";
 import OppDrawer from "./components/OppDrawer";
 import { LangCtx, useT, type Lang } from "./i18n";
 import Announcements from "./pages/Announcements";
@@ -35,6 +35,11 @@ const ROUTES = [
   { id: "data", label: "Data & Integrations", el: Data, icon: "M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3zM4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" },
 ] as const;
 
+// Static pages set these before loading the bundle: the page's use case and, optionally, an opportunity to open.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const BOOT = globalThis as any;
+if (BOOT.__PRECAST_ROUTE__ && !location.hash) history.replaceState(null, "", "#/" + BOOT.__PRECAST_ROUTE__);
+
 type Route = Extract<(typeof ROUTES)[number], { id: string }>;
 const routeOf = () => (ROUTES.find((r) => "id" in r && new RegExp(`^#/${r.id}($|[/?])`).test(location.hash)) as Route | undefined) ?? (ROUTES[0] as Route);
 
@@ -52,7 +57,7 @@ function Logo() {
 function Shell() {
   const t = useT();
   const [route, setRoute] = useState<Route>(routeOf);
-  const [opp, setOpp] = useState<string | null>(null);
+  const [opp, setOpp] = useState<string | null>(BOOT.__PRECAST_OPEN_OPP__ ?? null);
   const [toastMsg, setToast] = useState<string | null>(null);
   const [version, setVersion] = useState(0);
   const [llm, setLlm] = useState<{ available: boolean; model?: string } | null>(null);
@@ -76,7 +81,7 @@ function Shell() {
         <div className="shell">
           <nav className="side" aria-label="Main">
             <div className="brand">
-              <img className="pl" src="/brand/presight-logo-white.svg" alt="Presight" />
+              <img className="pl" src={asset("/brand/presight-logo-white.svg")} alt="Presight" />
               <div className="prod"><Logo /><div><b>Precast</b><small>{t("Strategic Intelligence Hub")}</small></div></div>
             </div>
             <div className="nav">
@@ -96,6 +101,7 @@ function Shell() {
             <header className="top">
               <div><h1>{t(route.label)}</h1><div className="tag">{t("Predict. Forecast. Precast.")}</div></div>
               <span className="grow" />
+              {STATIC && <span className="static-tag" title="Data captured when this static edition was built; editing and integrations need the full app.">Static snapshot · {snapshotDate} · read-only</span>}
               <a className="btn" href="#/ask">✦ {t("Ask")}</a>
               <div className="seg" role="group" aria-label="Language">
                 <button aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>

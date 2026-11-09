@@ -1,0 +1,167 @@
+@prefix pc: <https://precast.presight.ai/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<https://precast.presight.ai/ontology> a owl:Ontology ; rdfs:label "Precast Strategic Pipeline Ontology"@en ; owl:versionInfo "1.0.0" .
+
+pc:Opportunity a owl:Class ; rdfs:label "Opportunity"@en, "فرصة"@ar ; rdfs:comment "A strategic commercial pursuit tracked by the executive team."@en .
+pc:Organisation a owl:Class ; rdfs:label "Organisation"@en, "جهة"@ar ; rdfs:comment "Any legal entity."@en .
+pc:Counterparty a owl:Class ; rdfs:label "Counterparty"@en, "الطرف المقابل"@ar ; rdfs:subClassOf pc:Organisation ; rdfs:comment "The client, partner or authority on the other side of an opportunity."@en .
+pc:Person a owl:Class ; rdfs:label "Person / Role"@en, "شخص / دور"@ar ; rdfs:comment "An accountable role, e.g. Executive Sponsor or Executional Owner."@en .
+pc:ExecutiveSponsor a owl:Class ; rdfs:label "Executive Sponsor"@en, "الراعي التنفيذي"@ar ; rdfs:subClassOf pc:Person .
+pc:ExecutionalOwner a owl:Class ; rdfs:label "Executional Owner"@en, "المسؤول التنفيذي"@ar ; rdfs:subClassOf pc:Person .
+pc:Country a owl:Class ; rdfs:label "Country"@en, "دولة"@ar ; rdfs:subClassOf pc:Location .
+pc:Region a owl:Class ; rdfs:label "Region"@en, "منطقة"@ar ; rdfs:subClassOf pc:Location .
+pc:Location a owl:Class ; rdfs:label "Location"@en, "موقع"@ar .
+pc:Site a owl:Class ; rdfs:label "Deployment Site"@en, "موقع النشر"@ar ; rdfs:subClassOf pc:Location ; rdfs:comment "A physical deployment zone: radar site, smart-city perimeter, command centre."@en .
+pc:Domain a owl:Class ; rdfs:label "Business Domain"@en, "المجال"@ar ; rdfs:subClassOf pc:Concept .
+pc:Stage a owl:Class ; rdfs:label "Pipeline Stage"@en, "المرحلة"@ar ; rdfs:subClassOf pc:Concept .
+pc:Outlook a owl:Class ; rdfs:label "Outlook"@en, "التوقع"@ar ; rdfs:subClassOf pc:Concept .
+pc:Concept a owl:Class ; rdfs:label "Concept"@en, "مفهوم"@ar ; rdfs:comment "Controlled vocabulary term."@en .
+pc:Engagement a owl:Class ; rdfs:label "Engagement"@en, "تواصل"@ar ; rdfs:subClassOf pc:Event ; rdfs:comment "A recorded interaction with the counterparty (Engagement Log)."@en .
+pc:Action a owl:Class ; rdfs:label "Action / Milestone"@en, "إجراء / مرحلة"@ar ; rdfs:subClassOf pc:Event .
+pc:Announcement a owl:Class ; rdfs:label "Announcement"@en, "إعلان"@ar ; rdfs:subClassOf pc:Event .
+pc:Approval a owl:Class ; rdfs:label "Clearance Approval"@en, "موافقة"@ar ; rdfs:comment "Legal, IR or counterparty clearance on an announcement."@en .
+pc:Event a owl:Class ; rdfs:label "Event"@en, "حدث"@ar .
+pc:Prediction a owl:Class ; rdfs:label "Prediction"@en, "تنبؤ"@ar ; rdfs:comment "Model output: win probability, expected value, expected close."@en .
+pc:ScoreFactor a owl:Class ; rdfs:label "Score Factor"@en, "عامل التقييم"@ar ; rdfs:comment "An explainable driver that moved a prediction."@en .
+
+pc:hasCounterparty a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Counterparty ; rdfs:label "has counterparty"@en, "طرفها"@ar .
+pc:locatedIn a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Country ; rdfs:label "located in"@en, "تقع في"@ar .
+pc:deployedAt a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Site ; rdfs:label "deployed at"@en, "تُنشر في"@ar .
+pc:siteIn a owl:ObjectProperty ; rdfs:domain pc:Site ; rdfs:range pc:Country ; rdfs:label "site in"@en, "موقع في"@ar .
+pc:partOfRegion a owl:ObjectProperty ; rdfs:domain pc:Country ; rdfs:range pc:Region ; rdfs:label "part of region"@en, "جزء من منطقة"@ar .
+pc:inDomain a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Domain ; rdfs:label "in domain"@en, "في مجال"@ar .
+pc:atStage a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Stage ; rdfs:label "at stage"@en, "في مرحلة"@ar .
+pc:hasOutlook a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Outlook ; rdfs:label "has outlook"@en, "توقعها"@ar .
+pc:sponsoredBy a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:ExecutiveSponsor ; rdfs:label "sponsored by"@en, "برعاية"@ar .
+pc:ownedBy a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:ExecutionalOwner ; rdfs:label "owned by"@en, "يملكها"@ar .
+pc:hasEngagement a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Engagement ; rdfs:label "has engagement"@en, "لديها تواصل"@ar .
+pc:hasAction a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Action ; rdfs:label "has action"@en, "لديها إجراء"@ar .
+pc:hasAnnouncement a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Announcement ; rdfs:label "has announcement"@en, "لديها إعلان"@ar .
+pc:accountable a owl:ObjectProperty ; rdfs:domain pc:Action ; rdfs:range pc:Person ; rdfs:label "accountable owner"@en, "المسؤول"@ar .
+pc:requiresApproval a owl:ObjectProperty ; rdfs:domain pc:Announcement ; rdfs:range pc:Approval ; rdfs:label "requires approval"@en, "يتطلب موافقة"@ar .
+pc:hasPrediction a owl:ObjectProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:Prediction ; rdfs:label "has prediction"@en, "لديها تنبؤ"@ar .
+pc:explainedBy a owl:ObjectProperty ; rdfs:domain pc:Prediction ; rdfs:range pc:ScoreFactor ; rdfs:label "explained by"@en, "مفسر بـ"@ar .
+pc:precedes a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:domain pc:Stage ; rdfs:range pc:Stage ; rdfs:label "precedes"@en, "تسبق"@ar .
+
+pc:id a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:string ; rdfs:comment "Stable identifier, e.g. OPP-001"@en .
+pc:name a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:string ; rdfs:comment "Opportunity / engagement title"@en .
+pc:value a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:decimal ; rdfs:comment "Estimated value in AED"@en .
+pc:priority a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:integer ; rdfs:comment "Strategic priority: 5 critical … 1 peripheral"@en .
+pc:commercial a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:integer ; rdfs:comment "Manual commercial potential band"@en .
+pc:segment a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:SegmentScheme ; rdfs:comment "Government or Enterprise"@en .
+pc:type a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:OpportunityTypeScheme ; rdfs:comment "Commercial nature of the pursuit"@en .
+pc:intervention a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:YesNoScheme ; rdfs:comment "Executive intervention required"@en .
+pc:announce a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:AnnouncementPotentialScheme ; rdfs:comment "Announcement potential"@en .
+pc:sensitivity a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range pc:SensitivityScheme ; rdfs:comment "Information classification"@en .
+pc:milestone_date a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:date ; rdfs:comment "Next milestone date"@en .
+pc:verified a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:date ; rdfs:comment "Last verified"@en .
+pc:lat a owl:DatatypeProperty ; rdfs:domain pc:Site ; rdfs:range xsd:decimal ; rdfs:comment "Latitude (WGS84)"@en .
+pc:lon a owl:DatatypeProperty ; rdfs:domain pc:Site ; rdfs:range xsd:decimal ; rdfs:comment "Longitude (WGS84)"@en .
+pc:competitors a owl:DatatypeProperty ; rdfs:domain pc:Opportunity ; rdfs:range xsd:integer ; rdfs:comment "Number of competitors identified"@en .
+pc:date a owl:DatatypeProperty ; rdfs:domain pc:Engagement ; rdfs:range xsd:date ; rdfs:comment "Engagement date"@en .
+pc:summary a owl:DatatypeProperty ; rdfs:domain pc:Engagement ; rdfs:range xsd:string ; rdfs:comment "Summary / outcome"@en .
+pc:due a owl:DatatypeProperty ; rdfs:domain pc:Action ; rdfs:range xsd:date ; rdfs:comment "Due date"@en .
+pc:status a owl:DatatypeProperty ; rdfs:domain pc:Action ; rdfs:range pc:ActionStatusScheme ; rdfs:comment "Action status"@en .
+pc:escalate a owl:DatatypeProperty ; rdfs:domain pc:Action ; rdfs:range pc:YesNoScheme ; rdfs:comment "Escalation required"@en .
+pc:readiness a owl:DatatypeProperty ; rdfs:domain pc:Announcement ; rdfs:range pc:ReadinessScheme ; rdfs:comment "Announcement readiness"@en .
+pc:legal a owl:DatatypeProperty ; rdfs:domain pc:Approval ; rdfs:range pc:ApprovalStateScheme ; rdfs:comment "Legal approval"@en .
+pc:ir a owl:DatatypeProperty ; rdfs:domain pc:Approval ; rdfs:range pc:ApprovalStateScheme ; rdfs:comment "IR / disclosure review"@en .
+pc:p a owl:DatatypeProperty ; rdfs:domain pc:Prediction ; rdfs:range xsd:decimal ; rdfs:comment "Win probability"@en .
+pc:ev a owl:DatatypeProperty ; rdfs:domain pc:Prediction ; rdfs:range xsd:decimal ; rdfs:comment "Risk-weighted expected value (AED)"@en .
+
+pc:DomainScheme a skos:ConceptScheme ; rdfs:label "Domain"@en .
+pc:Domain_Security a skos:Concept ; skos:inScheme pc:DomainScheme ; skos:prefLabel "Security"@en, "الأمن"@ar ; skos:altLabel "public safety", "safe city", "cyber", "surveillance", "أمن", "الأمن", "أمنية", "الأمنية", "السلامة العامة" .
+pc:Domain_Defense a skos:Concept ; skos:inScheme pc:DomainScheme ; skos:prefLabel "Defense"@en, "الدفاع"@ar ; skos:altLabel "defence", "military", "armed forces", "border", "دفاع", "الدفاع", "الدفاعية", "عسكري" .
+pc:Domain_Urban a skos:Concept ; skos:inScheme pc:DomainScheme ; skos:prefLabel "Urban"@en, "الحلول الحضرية"@ar ; skos:altLabel "smart city", "city", "transport", "traffic", "mobility", "حضري", "المدن", "المدينة الذكية", "النقل" .
+pc:Domain_Financial a skos:Concept ; skos:inScheme pc:DomainScheme ; skos:prefLabel "Financial"@en, "المالية"@ar ; skos:altLabel "finance", "banking", "bank", "fintech", "مالي", "المالية", "مصرفي" .
+pc:Domain_Energy a skos:Concept ; skos:inScheme pc:DomainScheme ; skos:prefLabel "Energy"@en, "الطاقة"@ar ; skos:altLabel "grid", "power", "oil", "gas", "renewable", "طاقة", "الطاقة", "كهرباء" .
+pc:StageScheme a skos:ConceptScheme ; rdfs:label "Stage"@en .
+pc:Stage_Exploratory a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Exploratory"@en, "استكشافية"@ar ; skos:altLabel "early", "lead", "استكشافية" .
+pc:Stage_ActiveEngagement a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Active Engagement"@en, "تواصل نشط"@ar ; skos:altLabel "engaged", "qualification", "تواصل نشط" .
+pc:Stage_Proposal a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Proposal"@en, "عرض"@ar ; skos:altLabel "bid", "tender", "rfp", "عرض", "مناقصة" .
+pc:Stage_Negotiation a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Negotiation"@en, "تفاوض"@ar ; skos:altLabel "negotiating", "commercials", "تفاوض" .
+pc:Stage_Agreement a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Agreement"@en, "اتفاق"@ar ; skos:altLabel "contracting", "signature", "اتفاق", "توقيع" .
+pc:Stage_Execution a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Execution"@en, "تنفيذ"@ar ; skos:altLabel "delivery", "implementation", "تنفيذ" .
+pc:Stage_ClosedWon a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Closed Won"@en, "مكسوبة"@ar ; skos:altLabel "won", "مكسوبة", "فزنا" .
+pc:Stage_ClosedLost a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "Closed Lost"@en, "خاسرة"@ar ; skos:altLabel "lost", "خاسرة", "خسرنا" .
+pc:Stage_OnHold a skos:Concept ; skos:inScheme pc:StageScheme ; skos:prefLabel "On Hold"@en, "معلقة"@ar ; skos:altLabel "paused", "معلقة" .
+pc:OutlookScheme a skos:ConceptScheme ; rdfs:label "Outlook"@en .
+pc:Outlook_Positive a skos:Concept ; skos:inScheme pc:OutlookScheme ; skos:prefLabel "Positive"@en, "إيجابي"@ar ; skos:altLabel "good", "إيجابي" .
+pc:Outlook_Neutral a skos:Concept ; skos:inScheme pc:OutlookScheme ; skos:prefLabel "Neutral"@en, "محايد"@ar ; skos:altLabel "محايد" .
+pc:Outlook_Negative a skos:Concept ; skos:inScheme pc:OutlookScheme ; skos:prefLabel "Negative"@en, "سلبي"@ar ; skos:altLabel "bad", "سلبي" .
+pc:SegmentScheme a skos:ConceptScheme ; rdfs:label "Segment"@en .
+pc:Segment_Government a skos:Concept ; skos:inScheme pc:SegmentScheme ; skos:prefLabel "Government"@en, "حكومي"@ar ; skos:altLabel "public sector", "gov", "حكومي" .
+pc:Segment_Enterprise a skos:Concept ; skos:inScheme pc:SegmentScheme ; skos:prefLabel "Enterprise"@en, "مؤسسات"@ar ; skos:altLabel "private", "corporate", "مؤسسات" .
+pc:OpportunityTypeScheme a skos:ConceptScheme ; rdfs:label "OpportunityType"@en .
+pc:OpportunityType_CommercialContract a skos:Concept ; skos:inScheme pc:OpportunityTypeScheme ; skos:prefLabel "Commercial Contract"@en, "عقد تجاري"@ar .
+pc:OpportunityType_StrategicPartnership a skos:Concept ; skos:inScheme pc:OpportunityTypeScheme ; skos:prefLabel "Strategic Partnership"@en, "شراكة استراتيجية"@ar .
+pc:OpportunityType_JointVenture a skos:Concept ; skos:inScheme pc:OpportunityTypeScheme ; skos:prefLabel "Joint Venture"@en, "مشروع مشترك"@ar .
+pc:OpportunityType_MoU a skos:Concept ; skos:inScheme pc:OpportunityTypeScheme ; skos:prefLabel "MoU"@en, "مذكرة تفاهم"@ar .
+pc:OpportunityType_MarketAccess a skos:Concept ; skos:inScheme pc:OpportunityTypeScheme ; skos:prefLabel "Market Access"@en, "دخول السوق"@ar .
+pc:OpportunityType_StrategicEngagement a skos:Concept ; skos:inScheme pc:OpportunityTypeScheme ; skos:prefLabel "Strategic Engagement"@en, "تواصل استراتيجي"@ar .
+pc:ActionStatusScheme a skos:ConceptScheme ; rdfs:label "ActionStatus"@en .
+pc:ActionStatus_NotStarted a skos:Concept ; skos:inScheme pc:ActionStatusScheme ; skos:prefLabel "Not Started"@en, "لم يبدأ"@ar .
+pc:ActionStatus_InProgress a skos:Concept ; skos:inScheme pc:ActionStatusScheme ; skos:prefLabel "In Progress"@en, "قيد التنفيذ"@ar .
+pc:ActionStatus_Blocked a skos:Concept ; skos:inScheme pc:ActionStatusScheme ; skos:prefLabel "Blocked"@en, "متعثر"@ar .
+pc:ActionStatus_Completed a skos:Concept ; skos:inScheme pc:ActionStatusScheme ; skos:prefLabel "Completed"@en, "مكتمل"@ar .
+pc:ActionStatus_Cancelled a skos:Concept ; skos:inScheme pc:ActionStatusScheme ; skos:prefLabel "Cancelled"@en, "ملغى"@ar .
+pc:ReadinessScheme a skos:ConceptScheme ; rdfs:label "Readiness"@en .
+pc:Readiness_Planning a skos:Concept ; skos:inScheme pc:ReadinessScheme ; skos:prefLabel "Planning"@en, "تخطيط"@ar .
+pc:Readiness_PendingApprovals a skos:Concept ; skos:inScheme pc:ReadinessScheme ; skos:prefLabel "Pending Approvals"@en, "بانتظار الموافقات"@ar .
+pc:Readiness_Approved a skos:Concept ; skos:inScheme pc:ReadinessScheme ; skos:prefLabel "Approved"@en, "معتمد"@ar .
+pc:Readiness_Deferred a skos:Concept ; skos:inScheme pc:ReadinessScheme ; skos:prefLabel "Deferred"@en, "مؤجل"@ar .
+pc:Readiness_Announced a skos:Concept ; skos:inScheme pc:ReadinessScheme ; skos:prefLabel "Announced"@en, "أُعلن"@ar .
+pc:Readiness_Cancelled a skos:Concept ; skos:inScheme pc:ReadinessScheme ; skos:prefLabel "Cancelled"@en, "ملغى"@ar .
+pc:ApprovalStateScheme a skos:ConceptScheme ; rdfs:label "ApprovalState"@en .
+pc:ApprovalState_Pending a skos:Concept ; skos:inScheme pc:ApprovalStateScheme ; skos:prefLabel "Pending"@en, "قيد الانتظار"@ar .
+pc:ApprovalState_Approved a skos:Concept ; skos:inScheme pc:ApprovalStateScheme ; skos:prefLabel "Approved"@en, "معتمد"@ar .
+pc:ApprovalState_Rejected a skos:Concept ; skos:inScheme pc:ApprovalStateScheme ; skos:prefLabel "Rejected"@en, "مرفوض"@ar .
+pc:ApprovalState_NotRequired a skos:Concept ; skos:inScheme pc:ApprovalStateScheme ; skos:prefLabel "Not Required"@en, "غير مطلوب"@ar .
+pc:YesNoScheme a skos:ConceptScheme ; rdfs:label "YesNo"@en .
+pc:YesNo_Yes a skos:Concept ; skos:inScheme pc:YesNoScheme ; skos:prefLabel "Yes"@en, "نعم"@ar ; skos:altLabel "y", "true", "نعم" .
+pc:YesNo_No a skos:Concept ; skos:inScheme pc:YesNoScheme ; skos:prefLabel "No"@en, "لا"@ar ; skos:altLabel "n", "false", "لا" .
+pc:AnnouncementPotentialScheme a skos:ConceptScheme ; rdfs:label "AnnouncementPotential"@en .
+pc:AnnouncementPotential_Yes a skos:Concept ; skos:inScheme pc:AnnouncementPotentialScheme ; skos:prefLabel "Yes"@en, "نعم"@ar .
+pc:AnnouncementPotential_No a skos:Concept ; skos:inScheme pc:AnnouncementPotentialScheme ; skos:prefLabel "No"@en, "لا"@ar .
+pc:AnnouncementPotential_UnderConsideration a skos:Concept ; skos:inScheme pc:AnnouncementPotentialScheme ; skos:prefLabel "Under Consideration"@en, "قيد الدراسة"@ar ; skos:altLabel "maybe", "tbc" .
+pc:SensitivityScheme a skos:ConceptScheme ; rdfs:label "Sensitivity"@en .
+pc:Sensitivity_Public a skos:Concept ; skos:inScheme pc:SensitivityScheme ; skos:prefLabel "Public"@en, "عام"@ar .
+pc:Sensitivity_Internal a skos:Concept ; skos:inScheme pc:SensitivityScheme ; skos:prefLabel "Internal"@en, "داخلي"@ar .
+pc:Sensitivity_Confidential a skos:Concept ; skos:inScheme pc:SensitivityScheme ; skos:prefLabel "Confidential"@en, "سري"@ar .
+pc:Sensitivity_Restricted a skos:Concept ; skos:inScheme pc:SensitivityScheme ; skos:prefLabel "Restricted"@en, "مقيد"@ar .
+pc:Stage_Exploratory pc:precedes pc:Stage_ActiveEngagement .
+pc:Stage_ActiveEngagement pc:precedes pc:Stage_Proposal .
+pc:Stage_Proposal pc:precedes pc:Stage_Negotiation .
+pc:Stage_Negotiation pc:precedes pc:Stage_Agreement .
+pc:Stage_Agreement pc:precedes pc:Stage_Execution .
+
+pc:Country_UAE a pc:Country ; skos:prefLabel "UAE"@en, "الإمارات"@ar ; pc:partOfRegion pc:Region_GCC .
+pc:Country_SaudiArabia a pc:Country ; skos:prefLabel "Saudi Arabia"@en, "السعودية"@ar ; pc:partOfRegion pc:Region_GCC .
+pc:Country_Oman a pc:Country ; skos:prefLabel "Oman"@en, "عُمان"@ar ; pc:partOfRegion pc:Region_GCC .
+pc:Country_Bahrain a pc:Country ; skos:prefLabel "Bahrain"@en, "البحرين"@ar ; pc:partOfRegion pc:Region_GCC .
+pc:Country_Egypt a pc:Country ; skos:prefLabel "Egypt"@en, "مصر"@ar ; pc:partOfRegion pc:Region_NorthAfrica .
+pc:Country_Morocco a pc:Country ; skos:prefLabel "Morocco"@en, "المغرب"@ar ; pc:partOfRegion pc:Region_NorthAfrica .
+pc:Country_Jordan a pc:Country ; skos:prefLabel "Jordan"@en, "الأردن"@ar ; pc:partOfRegion pc:Region_Levant .
+pc:Country_Kazakhstan a pc:Country ; skos:prefLabel "Kazakhstan"@en, "كازاخستان"@ar ; pc:partOfRegion pc:Region_CentralAsia .
+pc:Country_Uzbekistan a pc:Country ; skos:prefLabel "Uzbekistan"@en, "أوزبكستان"@ar ; pc:partOfRegion pc:Region_CentralAsia .
+pc:Country_Azerbaijan a pc:Country ; skos:prefLabel "Azerbaijan"@en, "أذربيجان"@ar ; pc:partOfRegion pc:Region_Caucasus .
+pc:Country_Georgia a pc:Country ; skos:prefLabel "Georgia"@en, "جورجيا"@ar ; pc:partOfRegion pc:Region_Caucasus .
+pc:Country_Albania a pc:Country ; skos:prefLabel "Albania"@en, "ألبانيا"@ar ; pc:partOfRegion pc:Region_Balkans .
+pc:Country_Montenegro a pc:Country ; skos:prefLabel "Montenegro"@en, "الجبل الأسود"@ar ; pc:partOfRegion pc:Region_Balkans .
+pc:Country_Serbia a pc:Country ; skos:prefLabel "Serbia"@en, "صربيا"@ar ; pc:partOfRegion pc:Region_Balkans .
+pc:Country_DominicanRepublic a pc:Country ; skos:prefLabel "Dominican Republic"@en, "الدومينيكان"@ar ; pc:partOfRegion pc:Region_Caribbean .
+pc:Country_Indonesia a pc:Country ; skos:prefLabel "Indonesia"@en, "إندونيسيا"@ar ; pc:partOfRegion pc:Region_SouthEastAsia .
+pc:Country_Kenya a pc:Country ; skos:prefLabel "Kenya"@en, "كينيا"@ar ; pc:partOfRegion pc:Region_EastAfrica .
+pc:Region_Balkans a pc:Region ; rdfs:label "Balkans"@en .
+pc:Region_Caribbean a pc:Region ; rdfs:label "Caribbean"@en .
+pc:Region_Caucasus a pc:Region ; rdfs:label "Caucasus"@en .
+pc:Region_CentralAsia a pc:Region ; rdfs:label "Central Asia"@en .
+pc:Region_EastAfrica a pc:Region ; rdfs:label "East Africa"@en .
+pc:Region_GCC a pc:Region ; rdfs:label "GCC"@en .
+pc:Region_Levant a pc:Region ; rdfs:label "Levant"@en .
+pc:Region_NorthAfrica a pc:Region ; rdfs:label "North Africa"@en .
+pc:Region_SouthEastAsia a pc:Region ; rdfs:label "South-East Asia"@en .

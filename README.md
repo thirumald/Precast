@@ -78,6 +78,28 @@ open http://localhost:8000
 
 The first start seeds illustrative data (every counterparty is prefixed `Example:`). Load your own tracker from **Data & Integrations**, or set `PRECAST_SEED=0`.
 
+### Static edition (no server)
+
+The [`static/`](static/) folder is a self-contained, read-only edition: one HTML page per use case and per management report, plus a landing page ([`static/index.html`](static/index.html)). Open any page straight from disk, or publish the folder on GitHub Pages, SharePoint or any web server. It needs no backend and no internet access.
+
+| Pages | |
+|---|---|
+| `index.html` | Landing page with every use case, report and download |
+| `executive-dashboard.html` · `pipeline-overview.html` · `forecast-scoring.html` · `executive-matrix.html` · `geospatial.html` | Executive and pipeline views |
+| `interventions.html` · `announcements.html` · `engagement-log.html` · `opportunity-register.html` · `opportunity-360.html` | Action views and the opportunity drill-down |
+| `ask-precast.html` · `ontology-graph.html` · `data-integrations.html` | AI, ontology and platform |
+| `report-*.html` (9) | Executive Summary, Pipeline Health, Forecast & Commit, Win/Loss, Risk & Interventions, Regional, Sponsor Scorecard, Engagement, Announcements |
+| `downloads/` | Excel tracker template, sample export, every report in Excel, ontology (Turtle, JSON-LD) |
+
+Data comes from `static/data/snapshot.js`, captured by running the real backend at build time. It includes KPIs and reports for every single filter value, drafts for every opportunity and announcement, and the suggested Ask Precast questions; other questions are answered by an offline keyword parser. Editing, live AI generation, imports and Microsoft 365 sync need the full app.
+
+Rebuild after changing code or data:
+
+```bash
+cd frontend && npm run build:static && cd ..
+python tools/static/build_static.py        # set PRECAST_DB to snapshot a real database (treat output as Confidential)
+```
+
 ### Local development
 
 ```bash

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../api";
+import { api, href } from "../api";
 import Filters, { qs, type F } from "../components/Filters";
 import ReportView, { type Report } from "../components/ReportView";
 import { cls } from "../format";
@@ -35,7 +35,7 @@ export default function Reports() {
           <Filters value={f} onChange={(nf) => go(id, nf)} />
           <span style={{ flex: 1 }} />
           <button className="btn" onClick={() => rep.reload()}>Refresh</button>
-          <a className="btn" href={`/api/reports/${id}.xlsx${qs(f)}`} download>Excel</a>
+          <a className="btn" href={href(`/api/reports/${id}.xlsx${qs(f)}`)} download aria-disabled={!href(`/api/reports/${id}.xlsx${qs(f)}`)} title={href(`/api/reports/${id}.xlsx${qs(f)}`) ? "" : "Excel exports of filtered reports need the full app"}>Excel</a>
           <button className="btn primary" onClick={() => window.print()}>Print / PDF</button>
         </div>
         <div className="panel">{rep.data ? <ReportView rep={rep.data} onOpenReport={(r) => go(r)} /> : <Loading error={rep.error} label="Building report" />}</div>

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { api, apiKey, type M365Status } from "../api";
+import { api, apiKey, type M365Status, href, STATIC } from "../api";
 import { Chip, Loading, useApp, useData } from "../ui";
 
 type Import = { mode: string; counts: Record<string, number>; warnings: string[]; skipped: number; file?: string; source?: string };
@@ -49,9 +49,9 @@ export default function Data() {
         <div className="panel">
           <div className="ph"><h2>Tracker workbook</h2><span className="hint">Same sheets and columns as the MVP tracker</span></div>
           <div className="filters">
-            <a className="btn primary" href="/api/ingest/template" download>Download Excel template</a>
-            <a className="btn" href="/api/ingest/template?examples=false" download>Blank template</a>
-            <a className="btn" href="/api/export" download>Export current data</a>
+            <a className="btn primary" href={href("/api/ingest/template")} download>Download Excel template</a>
+            <a className="btn" href={href("/api/ingest/template?examples=false")} download>Blank template</a>
+            <a className="btn" href={href("/api/export")} download>Export current data</a>
           </div>
           <p className="hint">The template has Instructions, Opportunities, Engagement Log, Actions & Milestones and Announcements sheets, with dropdowns from the ontology and an example row in each sheet.</p>
           <div className="filters">
@@ -71,7 +71,7 @@ export default function Data() {
         </div>
         <div className="panel">
           <div className="ph"><h2>CRM / ERP sync API</h2><span className="hint">Replaces manual uploads</span></div>
-          <p className="hint">Connectors push batches to <span className="mono">POST /api/ingest/crm</span>. Records are validated against the ontology and upserted by ID. Full API docs: <a href="/docs" target="_blank" rel="noreferrer">/docs</a>.</p>
+          <p className="hint">Connectors push batches to <span className="mono">POST /api/ingest/crm</span>. Records are validated against the ontology and upserted by ID. Full API docs: {STATIC ? <span className="mono">/docs</span> : <a href="/docs" target="_blank" rel="noreferrer">/docs</a>} (in the running app).</p>
           <pre className="draft mono" style={{ fontSize: 12 }}>{`curl -X POST $PRECAST/api/ingest/crm \\
   -H "Content-Type: application/json" -H "X-API-Key: $KEY" \\
   -d '{"opportunities":[{"id":"OPP-201","name":"…","country":"KSA",

@@ -1,3 +1,4 @@
+import { asset } from "../api";
 import { aed, cls, fd, pct } from "../format";
 import { EngineBadge, Spark, useApp } from "../ui";
 
@@ -135,7 +136,8 @@ export default function ReportView({ rep, onOpenReport, bare }: { rep: Report; o
   return (
     <article className="report">
       {!bare && <header className="rep-h">
-        <img src="/brand/presight-logo.svg" alt="Presight" className="rep-logo" />
+        <img src={asset("/brand/presight-logo.svg")} alt="Presight" className="rep-logo light" />
+        <img src={asset("/brand/presight-logo-white.svg")} alt="" aria-hidden="true" className="rep-logo dark" />
         <div className="rep-t">
           <div className="idc">PRECAST · {rep.audience.toUpperCase()}</div>
           <h2>{rep.title}</h2>

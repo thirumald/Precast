@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Precast · Strategic Intelligence Hub · Use cases</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+body{margin:0;background:var(--bg)}
+.wrap{max-width:1240px;margin:0 auto;padding:40px 24px 64px;display:flex;flex-direction:column;gap:28px}
+.hero{display:flex;flex-direction:column;gap:14px;padding:32px;border-radius:16px;background:linear-gradient(135deg,#0D1A22 0%,#0A3F48 60%,#0A6E7C 100%);color:#fff}
+.hero img{height:40px;width:auto;align-self:flex-start}
+.hero h1{font-size:clamp(30px,4vw,44px);letter-spacing:-.02em}
+.hero .t{color:#9FE3EA;font-weight:600;letter-spacing:.02em}
+.hero p{margin:0;max-width:70ch;color:#C9D6DB;font-size:15.5px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.stats div{background:rgba(255,255,255,.08);border-radius:10px;padding:12px 14px}
+.stats span{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9FB8BF}
+.stats b{font-family:var(--f-display);font-size:24px}
+h2{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:12px;background:var(--surface);border:1px solid var(--line);color:var(--ink);text-decoration:none;min-height:150px}
+.card:hover{border-color:var(--accent);box-shadow:0 4px 18px rgba(0,0,0,.06)}
+.card b{font-family:var(--f-display);font-size:16.5px}
+.card span{color:var(--muted);font-size:13.5px}
+.card .tag{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.card i{margin-top:auto;font-style:normal;color:var(--accent);font-weight:600;font-size:13px}
+.note{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <img src="brand/presight-logo-white.svg" alt="Presight">
+    <div class="t">Predict. Forecast. Precast.</div>
+    <h1>Precast · Strategic Intelligence Hub</h1>
+    <p>AI-native command centre for the strategic pipeline: explainable win probabilities, risk-weighted forecasts, executive KPIs and reports, drafted interventions, bilingual Q&amp;A, ontology and Microsoft 365 integration. Every page below is a working, offline view of one use case.</p>
+    <div class="stats">
+      <div><span>Active opportunities</span><b>17</b></div>
+      <div><span>Pipeline</span><b>AED 1.82bn</b></div>
+      <div><span>Risk-weighted</span><b>AED 1.07bn</b></div>
+      <div><span>KPIs on / near / off target</span><b>2 / 5 / 6</b></div>
+    </div>
+  </header>
+  <section><h2>Executive</h2><div class="cards"><a class="card" href="executive-dashboard.html"><span class="tag">Executive</span><b>Executive Dashboard</b><span>Top-management KPI scorecard against target with trends, summary and decisions required.</span><i>Open →</i></a></div></section><section><h2>Pipeline</h2><div class="cards"><a class="card" href="pipeline-overview.html"><span class="tag">Pipeline</span><b>Pipeline Overview</b><span>Pipeline, expected value, quarterly forecast, probability movers, attention list and milestones.</span><i>Open →</i></a><a class="card" href="forecast-scoring.html"><span class="tag">Pipeline</span><b>Forecast & Scoring</b><span>Six-quarter forecast, model calibration and explainable win probability for every deal.</span><i>Open →</i></a><a class="card" href="executive-matrix.html"><span class="tag">Pipeline</span><b>Executive Matrix</b><span>Priority × commercial potential with AI potential and next-week movement vectors.</span><i>Open →</i></a><a class="card" href="geospatial.html"><span class="tag">Pipeline</span><b>Geospatial Intelligence</b><span>Opportunities on an offline map with clustering, value-at-risk heat and competitor density.</span><i>Open →</i></a><a class="card" href="opportunity-register.html"><span class="tag">Pipeline</span><b>Opportunity Register</b><span>Sortable, filterable register with probability and expected value.</span><i>Open →</i></a><a class="card" href="opportunity-360.html"><span class="tag">Pipeline</span><b>Opportunity 360</b><span>One opportunity end to end: summary, prediction drivers, activity, discussion, graph, workspace.</span><i>Open →</i></a></div></section><section><h2>Action</h2><div class="cards"><a class="card" href="interventions.html"><span class="tag">Action</span><b>Interventions</b><span>Deals needing executive action, ordered by value at risk, with drafted briefing memos.</span><i>Open →</i></a><a class="card" href="announcements.html"><span class="tag">Action</span><b>Announcement Readiness</b><span>Legal, IR and counterparty clearance workflow with gated press-release drafts.</span><i>Open →</i></a><a class="card" href="engagement-log.html"><span class="tag">Action</span><b>Engagement Log</b><span>Engagement history and AI extraction of meeting notes into structured entries.</span><i>Open →</i></a></div></section><section><h2>AI</h2><div class="cards"><a class="card" href="ask-precast.html"><span class="tag">AI</span><b>Ask Precast</b><span>Bilingual natural-language questions answered from computed figures.</span><i>Open →</i></a><a class="card" href="ontology-graph.html"><span class="tag">AI</span><b>Ontology & Knowledge Graph</b><span>The Precast ontology and the portfolio knowledge graph.</span><i>Open →</i></a></div></section><section><h2>Platform</h2><div class="cards"><a class="card" href="data-integrations.html"><span class="tag">Platform</span><b>Data & Integrations</b><span>Excel tracker template, CRM API, local LLM and Microsoft 365 (SharePoint, Teams, Outlook).</span><i>Open →</i></a></div></section>
+  <section><h2>Management reports</h2><div class="cards"><a class="card" href="report-executive-summary.html"><span class="tag">CEO / Board</span><b>Executive Summary</b><span>One-page board view: KPI scorecard against target, forecast, top deals, decisions required and top risks.</span><i>Open →</i></a><a class="card" href="report-pipeline-health.html"><span class="tag">C-suite</span><b>Pipeline Health</b><span>Pipeline by stage, domain and segment; aging; data-quality exceptions that weaken the forecast.</span><i>Open →</i></a><a class="card" href="report-forecast.html"><span class="tag">CEO / CFO</span><b>Forecast & Commit</b><span>Six-quarter forecast against target, deals closing this and next quarter, probability movers, slipped milestones.</span><i>Open →</i></a><a class="card" href="report-win-loss.html"><span class="tag">CCO / Strategy</span><b>Win / Loss Analysis</b><span>Win rate by domain and deal size, value won and lost, sales cycle and model calibration.</span><i>Open →</i></a><a class="card" href="report-risk.html"><span class="tag">CEO / COO</span><b>Risk & Interventions</b><span>Value at risk by domain and region, at-risk deals with model drivers, blocked and overdue actions.</span><i>Open →</i></a><a class="card" href="report-regional.html"><span class="tag">Regional leadership</span><b>Regional Performance</b><span>Region and country exposure, risk and competition; region × domain matrix.</span><i>Open →</i></a><a class="card" href="report-sponsor-scorecard.html"><span class="tag">CEO / ExCo</span><b>Sponsor Scorecard</b><span>Accountability view per executive sponsor and executional owner.</span><i>Open →</i></a><a class="card" href="report-engagement.html"><span class="tag">Domain directors</span><b>Engagement Activity</b><span>Weekly engagement volume, mix and sources, quiet opportunities, tone of recent notes.</span><i>Open →</i></a><a class="card" href="report-announcements.html"><span class="tag">Communications / IR</span><b>Announcement Readiness</b><span>Announcement pipeline, approvals pending by gate, timing risk.</span><i>Open →</i></a></div></section>
+  <section><h2>Downloads</h2><div class="cards">
+    <a class="card" href="downloads/Precast_Tracker_Template.xlsx"><span class="tag">Excel</span><b>Excel tracker template</b><span>Sheets, dropdowns and an example row per sheet; loads into Precast unchanged.</span><i>Open →</i></a>
+    <a class="card" href="downloads/Precast_Tracker_Export.xlsx"><span class="tag">Excel</span><b>Sample data export</b><span>The sample register in tracker layout.</span><i>Open →</i></a>
+    <a class="card" href="downloads/precast-ontology.ttl"><span class="tag">Ontology</span><b>Ontology (OWL/Turtle)</b><span>Classes, relations and bilingual vocabularies.</span><i>Open →</i></a>
+  </div></section>
+  <p class="note">Static edition built 2026-11-09 from illustrative sample data (every counterparty is prefixed “Example:”). Pages open directly from disk or any static web host. Read-only: editing, live AI generation, imports and Microsoft 365 sync need the full Precast app (<code>docker compose up</code>). Filters cover one value at a time.</p>
+</div>
+</body>
+</html>

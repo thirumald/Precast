@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { api, type GraphData, type Opp } from "../api";
+import { api, type GraphData, type Opp, href } from "../api";
 import GraphView, { CLASS_COLOR } from "../components/GraphView";
 import { Loading, useApp, useData } from "../ui";
 
@@ -39,8 +39,8 @@ export default function Ontology() {
             <option value="">Whole active portfolio</option>{(opps.data || []).map((x) => <option key={x.id} value={x.id}>{x.id} · {x.name}</option>)}</select></label>
         )}
         <span style={{ flex: 1 }} />
-        <a className="btn" href="/api/ontology.ttl" download>Download OWL (Turtle)</a>
-        <a className="btn" href="/api/ontology.jsonld" download>Download JSON-LD</a>
+        <a className="btn" href={href("/api/ontology.ttl")} download>Download OWL (Turtle)</a>
+        <a className="btn" href={href("/api/ontology.jsonld")} download>Download JSON-LD</a>
       </div>
       <section className="panel">
         <div className="ph"><h2>{view === "schema" ? "Precast ontology v" + o.version : focus ? `Neighbourhood of ${focus}` : "Portfolio knowledge graph"}</h2>
