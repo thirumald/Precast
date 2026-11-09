@@ -68,7 +68,19 @@ jobs:
           [ "$n" -ge 23 ]
           du -sh static
 
-      - uses: actions/configure-pages@v5
+      # Pages must be enabled once: Settings → Pages → Source: GitHub Actions.
+      # Optional: add a repository secret PAGES_TOKEN (fine-grained PAT with Administration + Pages: write)
+      # and this step will enable Pages automatically; the default GITHUB_TOKEN cannot.
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: ${{ secrets.PAGES_TOKEN != '' }}
+          token: ${{ secrets.PAGES_TOKEN || github.token }}
+
+      - name: Explain Pages setup on failure
+        if: failure()
+        run: |
+          echo "::error title=GitHub Pages is not enabled::Open Settings > Pages and set Source to 'GitHub Actions', then re-run this workflow. Private repositories need a paid plan for Pages."
 
       - uses: actions/upload-pages-artifact@v3
         with:
